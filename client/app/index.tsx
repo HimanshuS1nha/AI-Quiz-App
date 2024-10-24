@@ -1,10 +1,11 @@
 import { useState, useCallback } from "react";
-import { Text, View, Pressable } from "react-native";
+import { Text, View, Pressable, Alert } from "react-native";
 import tw from "twrnc";
 import { Picker } from "@react-native-picker/picker";
 
 import ImageWrapper from "@/components/ImageWrapper";
 import { topics } from "../constants/topics";
+import { router } from "expo-router";
 
 export default function Index() {
   const [topic, setTopic] = useState("");
@@ -20,6 +21,25 @@ export default function Index() {
     },
     []
   );
+
+  const handleStartQuiz = useCallback(() => {
+    if (topic === "") {
+      return Alert.alert("Error", "Please select a topic");
+    }
+
+    if (numberOfQuestions === "") {
+      return Alert.alert("Error", "Please select number of questions");
+    }
+
+    router.push({
+      pathname: "/question",
+      params: {
+        currentQuestion: 1,
+        numberOfQuestions,
+        topic,
+      },
+    });
+  }, [numberOfQuestions, topic]);
   return (
     <ImageWrapper>
       <Text style={tw`text-white text-3xl font-bold`}>AI QUIZ APP</Text>
@@ -59,6 +79,7 @@ export default function Index() {
 
       <Pressable
         style={tw`bg-emerald-600 w-[90%] items-center justify-center py-3 rounded-xl`}
+        onPress={handleStartQuiz}
       >
         <Text style={tw`text-white text-lg font-medium`}>Start</Text>
       </Pressable>
