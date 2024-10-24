@@ -1,14 +1,24 @@
 import { View, Text, Pressable, ActivityIndicator, Alert } from "react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import tw from "twrnc";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
 import ImageWrapper from "@/components/ImageWrapper";
 
 const Question = () => {
-  const { numberOfQuestions, currentQuestion, topic } = useLocalSearchParams();
+  const { numberOfQuestions, currentQuestion, topic } =
+    useLocalSearchParams() as {
+      numberOfQuestions: string;
+      currentQuestion: string;
+      topic: string;
+    };
+
+  const [selectedAnswer, setSelectedAnswer] = useState<
+    "option1" | "option2" | "option3" | "option4"
+  >();
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: [`get-question-${currentQuestion}`],
@@ -37,6 +47,40 @@ const Question = () => {
       Alert.alert("Error", "Some error occured. Please try again later!");
     }
   }
+
+  const checkAnswer = useCallback(
+    (selectedAnswer: "option1" | "option2" | "option3" | "option4") => {
+      if (!data) {
+        return;
+      }
+      setSelectedAnswer(selectedAnswer);
+
+      if (selectedAnswer === data.question.rightAnswer) {
+        setIsAnswerCorrect(true);
+      } else {
+        setIsAnswerCorrect(false);
+      }
+
+      setTimeout(() => {
+        if (currentQuestion === numberOfQuestions) {
+          router.replace({
+            pathname: "/result",
+            params: { numberOfQuestions },
+          });
+        } else {
+          router.replace({
+            pathname: "/question",
+            params: {
+              currentQuestion: parseInt(currentQuestion) + 1,
+              topic,
+              numberOfQuestions,
+            },
+          });
+        }
+      }, 1500);
+    },
+    [numberOfQuestions, currentQuestion, data, selectedAnswer]
+  );
   return (
     <ImageWrapper>
       {isLoading ? (
@@ -54,30 +98,94 @@ const Question = () => {
 
           <View style={tw`gap-y-6 w-full items-center mt-10`}>
             <Pressable
-              style={tw`bg-white w-[85%] items-center justify-center py-3 rounded-xl`}
+              style={tw`${
+                selectedAnswer === "option1"
+                  ? isAnswerCorrect
+                    ? "bg-emerald-600"
+                    : "bg-rose-600"
+                  : "bg-white"
+              } w-[85%] items-center justify-center py-3 rounded-xl`}
+              onPress={() => {
+                checkAnswer("option1");
+              }}
+              disabled={!!selectedAnswer}
             >
-              <Text style={tw`font-semibold text-base`}>
+              <Text
+                style={tw`font-semibold text-base ${
+                  selectedAnswer === "option1" && isAnswerCorrect
+                    ? "text-white"
+                    : "text-black"
+                }`}
+              >
                 {data?.question.option1}
               </Text>
             </Pressable>
             <Pressable
-              style={tw`bg-white w-[85%] items-center justify-center py-3 rounded-xl`}
+              style={tw`${
+                selectedAnswer === "option2"
+                  ? isAnswerCorrect
+                    ? "bg-emerald-600"
+                    : "bg-rose-600"
+                  : "bg-white"
+              } w-[85%] items-center justify-center py-3 rounded-xl`}
+              onPress={() => {
+                checkAnswer("option2");
+              }}
+              disabled={!!selectedAnswer}
             >
-              <Text style={tw`font-semibold text-base`}>
+              <Text
+                style={tw`font-semibold text-base ${
+                  selectedAnswer === "option2" && isAnswerCorrect
+                    ? "text-white"
+                    : "text-black"
+                }`}
+              >
                 {data?.question.option2}
               </Text>
             </Pressable>
             <Pressable
-              style={tw`bg-white w-[85%] items-center justify-center py-3 rounded-xl`}
+              style={tw`${
+                selectedAnswer === "option3"
+                  ? isAnswerCorrect
+                    ? "bg-emerald-600"
+                    : "bg-rose-600"
+                  : "bg-white"
+              } w-[85%] items-center justify-center py-3 rounded-xl`}
+              onPress={() => {
+                checkAnswer("option3");
+              }}
+              disabled={!!selectedAnswer}
             >
-              <Text style={tw`font-semibold text-base`}>
+              <Text
+                style={tw`font-semibold text-base ${
+                  selectedAnswer === "option3" && isAnswerCorrect
+                    ? "text-white"
+                    : "text-black"
+                }`}
+              >
                 {data?.question.option3}
               </Text>
             </Pressable>
             <Pressable
-              style={tw`bg-white w-[85%] items-center justify-center py-3 rounded-xl`}
+              style={tw`${
+                selectedAnswer === "option4"
+                  ? isAnswerCorrect
+                    ? "bg-emerald-600"
+                    : "bg-rose-600"
+                  : "bg-white"
+              } w-[85%] items-center justify-center py-3 rounded-xl`}
+              onPress={() => {
+                checkAnswer("option4");
+              }}
+              disabled={!!selectedAnswer}
             >
-              <Text style={tw`font-semibold text-base`}>
+              <Text
+                style={tw`font-semibold text-base ${
+                  selectedAnswer === "option4" && isAnswerCorrect
+                    ? "text-white"
+                    : "text-black"
+                }`}
+              >
                 {data?.question.option4}
               </Text>
             </Pressable>
