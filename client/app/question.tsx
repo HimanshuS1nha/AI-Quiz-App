@@ -6,8 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
 import ImageWrapper from "@/components/ImageWrapper";
+import { useNumberOfRightAnswers } from "@/hooks/useNumberOfRightAnswers";
 
 const Question = () => {
+  const { setNumberOfRightAnswers, numberOfRightAnswers } =
+    useNumberOfRightAnswers();
+
   const { numberOfQuestions, currentQuestion, topic } =
     useLocalSearchParams() as {
       numberOfQuestions: string;
@@ -56,6 +60,7 @@ const Question = () => {
       setSelectedAnswer(selectedAnswer);
 
       if (selectedAnswer === data.question.rightAnswer) {
+        setNumberOfRightAnswers(numberOfRightAnswers + 1);
         setIsAnswerCorrect(true);
       } else {
         setIsAnswerCorrect(false);
