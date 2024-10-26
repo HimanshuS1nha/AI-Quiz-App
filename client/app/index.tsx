@@ -39,6 +39,9 @@ export default function Index() {
         topic,
       },
     });
+
+    setTopic("");
+    setNumberOfQuestions("");
   }, [numberOfQuestions, topic]);
   return (
     <ImageWrapper>

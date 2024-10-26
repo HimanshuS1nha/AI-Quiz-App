@@ -117,9 +117,7 @@ const Question = () => {
             >
               <Text
                 style={tw`font-semibold text-base ${
-                  selectedAnswer === "option1" && isAnswerCorrect
-                    ? "text-white"
-                    : "text-black"
+                  selectedAnswer === "option1" ? "text-white" : "text-black"
                 }`}
               >
                 {data?.question.option1}
@@ -140,9 +138,7 @@ const Question = () => {
             >
               <Text
                 style={tw`font-semibold text-base ${
-                  selectedAnswer === "option2" && isAnswerCorrect
-                    ? "text-white"
-                    : "text-black"
+                  selectedAnswer === "option2" ? "text-white" : "text-black"
                 }`}
               >
                 {data?.question.option2}
@@ -163,9 +159,7 @@ const Question = () => {
             >
               <Text
                 style={tw`font-semibold text-base ${
-                  selectedAnswer === "option3" && isAnswerCorrect
-                    ? "text-white"
-                    : "text-black"
+                  selectedAnswer === "option3" ? "text-white" : "text-black"
                 }`}
               >
                 {data?.question.option3}
@@ -186,9 +180,7 @@ const Question = () => {
             >
               <Text
                 style={tw`font-semibold text-base ${
-                  selectedAnswer === "option4" && isAnswerCorrect
-                    ? "text-white"
-                    : "text-black"
+                  selectedAnswer === "option4" ? "text-white" : "text-black"
                 }`}
               >
                 {data?.question.option4}
