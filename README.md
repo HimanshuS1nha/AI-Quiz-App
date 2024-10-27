@@ -41,7 +41,7 @@ Test your knowledge and challenge your mind with our AI Quiz App! Quiz your way 
 
 ## Demo
 
-Live Demo - Coming Soon
+Live Demo - [Click Here](https://www.youtube.com/shorts/SkZb6UJ4M9A)
 
 ## 🚀 About Me
 
